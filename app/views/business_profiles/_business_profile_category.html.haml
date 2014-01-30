@@ -1,0 +1,13 @@
+.form-group.business_profile_category
+  -#= ff.label ff.index == 0 ? :category : "", class: "col-lg-2 control-label"
+  = label nil, ff.index == 0 ? :category : "", " ", class: "col-lg-2 control-label"
+  .form-inline.col-lg-10
+    .conciage-typeahead
+      = ff.hidden_field :id, class: "conciage-typeahead-business-profile-id", value: f.object.id
+      = ff.hidden_field :places_category_id, class: "conciage-typeahead-business-profile-category-id"
+      = ff.text_field :places_category_name, class: "form-control conciage-typeahead-business-profile-category-name", type: "text", placeholder: "category"
+    .form-control-right-note
+      -if ff.index == 0
+        %small.text-muted Primary
+      -else
+        .remove_business_profile_category.button.close.pull-left &times;

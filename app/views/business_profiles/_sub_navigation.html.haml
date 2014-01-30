@@ -1,0 +1,7 @@
+#sub_navigation{role: "navigation"}
+  %ul.nav.nav-pills.nav-stacked
+    %li{class: current_page?(business_profiles_path) ? "active" : ""}= link_to "Overview", business_profiles_path
+    -if current_page?(new_business_profile_path) || params[:action] == "create"
+      %li.active= link_to "Create", new_business_profile_path
+    -if editing?
+      %li.active= link_to "Edit", edit_business_profile_path(@business_profile)

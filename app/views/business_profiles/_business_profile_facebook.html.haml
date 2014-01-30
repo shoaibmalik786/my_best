@@ -1,0 +1,51 @@
+.modal.fade#business_profile_facebook{tabindex: "-1", role: "dialog", "aria-labelledby" => "signInLabel", "aria-hidden" => "true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{type: "button", "data-dismiss" => "modal", "aria-hidden" => "true"} &times;
+        .h4 Facebook Setup
+
+      #business_profile_facebook_alerts
+
+      .modal-body
+        #email
+          -#enabled/disabled
+          -#use from user if user has it
+          -#facebook uid to enter
+
+          = form_for(business_profile, as: :business_profile,
+                               url: { action: :update, method: :patch },
+                               html: { class: "form-inline", id: "business_profile_facebook", role: "form" },
+                               format: :json,
+                               remote: true) do |f|
+
+            = f.fields_for :business_profile_facebook do |ff|
+              .form-group
+                = ff.label "Status", class: "col-lg-2 control-label"
+                .checkbox{style: "width: 360px; padding-left: 31px"}
+                  %label
+                    = ff.check_box :enabled, class: "check-inline"
+                    Enable or disable Facebook interaction
+
+            %br
+            %br
+            .form-group{class: "#{"disabled" unless current_user.facebook_user_info}"}
+              = f.label "Personal", class: "col-lg-2 control-label"
+              .checkbox.checkbox-modal{style: "padding-left: 28px;"}
+                %label
+                  = f.check_box :isfacebookpersonal, class: "check-inline"
+                  Use Facebook authentication from the user profile
+
+            %br
+            %br
+            = f.fields_for :business_profile_facebook do |ff|
+              .form-group
+                = ff.label "Username", class: "col-lg-2 control-label"
+                .form-inline.col-lg-10
+                  = ff.phone_field :uid, class: "form-control", maxlength: 255, type:"text"
+
+            %br
+            %br
+            %button.btn.btn-default.btn-block{style: "width: 50%;"} Save
+
+      .modal-footer

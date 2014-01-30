@@ -1,0 +1,23 @@
+= render partial: "sub_navigation"
+
+- if @messages.empty?
+  .jumbotron
+    %h2 Haven't broadcast any messages yet!
+    %h4
+      Maybe you would like to
+      = link_to "add a new one", new_message_path
+      ?
+
+- else
+  #content-with-sub-navigation
+    %table.table.table-hover
+      %thead
+        %tr
+          %th Message
+          %th Status
+          %th Start Date
+          %th End Date
+          %th
+      %tbody
+        - @messages.each do |message|
+          = render partial: "message", locals: {message: message}

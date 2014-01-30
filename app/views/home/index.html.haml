@@ -1,0 +1,35 @@
+.jumbotron
+  %h2
+    Welcome to
+    = link_to "Conciage", root_path
+    = ":-)"
+  - if user_signed_in?
+    %h4= "Howdy #{current_user.title}!"
+
+- if !@messages.empty?
+  %h2 Messages
+  %table.table.table-striped
+    %tr
+      %th Description
+      %th Address
+      %th Business Profile
+
+    - @messages.each do |message|
+      %tr.message
+        %td.description= message.description
+        %td.full_address= message.full_address
+        %td.business_profile_name= message.business_profile.name
+
+%h2 Location
+#input
+  %input#gmaps-input-address{placeholder: "Start typing a place name...", class: "form-control", type: "text", style: "width: 500px"}/
+  %br/
+  .hide
+    Latitude:
+    %span#gmaps-output-latitude
+    %br/
+    Longitude:
+    %span#gmaps-output-longitude
+    %br/
+  #gmaps-error
+#gmaps-canvas(style="width: 100%; height: 400px;")

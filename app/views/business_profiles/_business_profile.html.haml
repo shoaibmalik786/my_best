@@ -1,0 +1,21 @@
+.panel.panel-default
+
+  .panel-heading
+    %h4.panel-title
+      = link_to business_profile.name, edit_business_profile_path(business_profile)
+      = link_to business_profile_path(business_profile), method: :delete, data: {confirm: "Really delete '#{business_profile.name}'?", action: "Sure, go ahead"}, class: "button close", "aria-hidden" => "true" do
+        &times;
+
+  .panel-body
+    .media
+      .media-object.pull-left= holder_tag '64x64', 'logo', 'gray'
+      .media-body
+        %div
+          Categories:
+          = business_profile.business_categories.map(&:name).join(", ")
+        %div
+          Web:
+          = link_to business_profile.web, business_profile.web, :target => '_blank'
+        %div
+          Address:
+          = business_profile.address_one

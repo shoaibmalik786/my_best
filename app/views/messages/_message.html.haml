@@ -1,0 +1,12 @@
+%tr
+  %td= link_to message.title, message_analytics_path(message)
+  %td= message.message_status_id
+  %td= message.start_date
+  %td= message.end_date
+  %td
+    = link_to message_to_played_message_path(message), method: :patch do
+      %span.glyphicon.glyphicon-play
+    = link_to message_to_stopped_message_path(message), method: :patch do
+      %span.glyphicon.glyphicon-stop
+    = link_to message_to_paused_message_path(message), method: :patch do
+      %span.glyphicon.glyphicon-pause

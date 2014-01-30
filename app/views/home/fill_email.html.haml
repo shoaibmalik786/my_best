@@ -1,0 +1,18 @@
+%h2 You don't have an email, please fill the info bellow:
+
+= form_tag "/fill_email" do
+
+  %p
+    Email:
+    %br/
+    = text_field_tag :email
+  %p
+    Password:
+    %br/
+    = password_field_tag :password
+  %p
+    Password Confirmation:
+    %br/
+    = password_field_tag :password_confirmation
+
+  = submit_tag "Save"

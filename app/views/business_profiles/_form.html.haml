@@ -1,0 +1,207 @@
+-#= render partial: "business_profile_facebook", locals: {business_profile: @form}
+
+= form_for(@form, as: :business_profile,
+                  url: @form.model.new_record? ? { action: :create, method: :post } : { action: :update, method: :patch },
+                  html: { class: "form-horizontal conciage-form", id: :business, role: "form" }) do |f|
+
+  = form_error_messages!(@form)
+
+  .form-group
+    = f.label :name, class: "col-lg-2 control-label"
+    .col-lg-10#name
+      .input-group.conciage-typeahead
+        = f.text_field :name, autocomplete: false, autofocus: true, class: "form-control", type: "text", maxlength: 50, placeholder: "name"
+
+  = f.fields_for :username do |username|
+
+    .form-group
+      = username.label :username, class: "col-lg-2 control-label"
+      .form-inline.col-lg-10
+        %div
+          = username.hidden_field :username, id: "username_original"
+          = username.text_field :username, class: "form-control", maxlength: 50, type: "text"
+
+  #business_profile_category_template.hidden
+    = f.fields_for :empty_business_category do |ff|
+      = render partial: "business_profile_category", locals: {f: f, ff: ff}
+
+  #business_profile_categories
+    = f.fields_for :business_profile_categories do |ff|
+      = render partial: "business_profile_category", locals: {f: f, ff: ff}
+
+  .form-group#add_business_category_group{class: "#{"hidden" unless @form.business_profile_categories.size < 3}"}
+    = f.label " ", class: "col-lg-2 control-label"
+    .col-lg-10
+      %span.text-muted
+        %strong +
+      =link_to "Add Category", "#", id: "add_business_profile_category"
+
+  .form-group
+    = f.label "Address", class: "col-lg-2 control-label"
+    .form-inline.col-lg-10
+      = f.text_field :address_one, class: "form-control", type: "text", maxlength: 255, placeholder: "address line 1"
+      = f.text_field :address_two, class: "form-control", type: "text", maxlength: 255, placeholder: "address line 2"
+
+  .form-group
+    = f.label " ", class: "col-lg-2 control-label"
+    .form-inline.col-lg-10
+      .conciage-typeahead
+        = f.hidden_field :city_id
+        = f.text_field :city_name, autocomplete: false, class: "form-control", type: "text", placeholder: "city"
+      .conciage-typeahead
+        = f.hidden_field :zip_code_id
+        = f.text_field :zip_code_name, autocomplete: false, class: "form-control", type: "text", placeholder: "zip code"
+
+  .form-group
+    = f.label " ", class: "col-lg-2 control-label"
+    .form-inline.col-lg-10
+      .conciage-typeahead
+        = f.hidden_field :country_id
+        = f.hidden_field :country_code
+        = f.text_field :country_name, autocomplete: false, class: "form-control", type: "text", placeholder: "country"
+      .conciage-typeahead
+        = f.hidden_field :state_id
+        = f.text_field :state_name, autocomplete: false, class: "form-control", type: "text", placeholder: "state"
+
+  .form-group
+    = f.label :time_zone, class: "col-lg-2 control-label"
+    .col-lg-10
+      .conciage-typeahead
+        = f.hidden_field :time_zone
+        = f.text_field :time_zone_name, autocomplete: false, class: "form-control full_width", type: "text", placeholder: "time zone"
+
+  .form-group
+    = f.label :description, class: "col-lg-2 control-label"
+    .col-lg-10
+      = f.text_area :bio, class: "form-control", type: "text", maxlength: 160 + 40, placeholder: "what is the business about?"
+      %br
+
+  .form-group
+    = f.label :web, class: "col-lg-2 control-label"
+    .col-lg-10
+      = f.url_field :web, class: "form-control", type: "text", placeholder: "homepage"
+
+  .form-group
+    = f.label :contact, class: "col-lg-2 control-label"
+    .col-lg-10
+      = f.text_field :contact, class: "form-control", type: "text", maxlength: 255, placeholder: "name"
+
+  .form-group
+    = f.label :email, class: "col-lg-2 control-label"
+    .col-lg-10
+      = f.email_field :email, class: "form-control", maxlength: 255, type: "email", placeholder: "email"
+
+  .form-group
+    = f.label :phone, class: "col-lg-2 control-label"
+    .col-lg-10
+      = f.phone_field :phone, class: "form-control", maxlength: 255, type:"tel", placeholder: "phone"
+
+  .form-group
+    = f.label :social, class: "col-lg-2 control-label"
+    .col-lg-10
+      %ul.nav.nav-pills.btn-sm#business_profile_social
+        %li.active
+          = link_to "Facebook", "#business_profile_facebook", "data-toggle" => "tab"
+        %li
+          = link_to "Google", "#business_profile_google", "data-toggle" => "tab"
+        %li
+          = link_to "Twitter", "#business_profile_twitter", "data-toggle" => "tab"
+
+      .tab-content#business_profile_social_content
+        .tab-pane.fade.active.in#business_profile_facebook
+          .panel.panel-default
+            .panel-body
+              = f.fields_for :business_profile_facebook do |ff|
+                .form-group
+                  = ff.label "Status", class: "col-lg-2 control-label", style: "margin-right: 38px"
+                  .checkbox
+                    %label
+                      = ff.check_box :enabled, class: "check-inline"
+                      Enable or Disable Facebook
+
+              .form-group{class: "#{"disabled" unless current_user.facebook_user_info}"}
+                = f.label "Personal", class: "col-lg-2 control-label", style: "margin-right: 38px"
+                .checkbox.checkbox-modal
+                  %label
+                    = f.check_box :isfacebookpersonal, class: "check-inline"
+                    Use Facebook authentication from the user profile
+
+              = f.fields_for :business_profile_facebook do |ff|
+                .form-group
+                  = ff.label "Username", class: "col-lg-2 control-label"
+                  .form-inline.col-lg-10
+                    = ff.text_field :uid, class: "form-control", maxlength: 255, type:"text"
+
+                .form-group
+                  = ff.label :web, class: "col-lg-2 control-label"
+                  .col-lg-10
+                    = ff.url_field :web, class: "form-control", type: "text", placeholder: "business page"
+
+        .tab-pane.fade.in#business_profile_google
+          .panel.panel-default
+            .panel-body
+              = f.fields_for :business_profile_google do |ff|
+                .form-group
+                  = ff.label "Status", class: "col-lg-2 control-label", style: "margin-right: 38px"
+                  .checkbox
+                    %label
+                      = ff.check_box :enabled, class: "check-inline"
+                      Enable or Disable Google
+
+              .form-group{class: "#{"disabled" unless current_user.google_user_info}"}
+                = f.label "Personal", class: "col-lg-2 control-label", style: "margin-right: 38px"
+                .checkbox.checkbox-modal
+                  %label
+                    = f.check_box :isgooglepluspersonal, class: "check-inline"
+                    Use Google authentication from the user profile
+
+              = f.fields_for :business_profile_google do |ff|
+                .form-group
+                  = ff.label "Username", class: "col-lg-2 control-label"
+                  .form-inline.col-lg-10
+                    = ff.text_field :uid, class: "form-control", maxlength: 255, type:"text"
+
+                .form-group
+                  = ff.label :web, class: "col-lg-2 control-label"
+                  .col-lg-10
+                    = ff.url_field :web, class: "form-control", type: "text", placeholder: "business page"
+
+        .tab-pane.fade.in#business_profile_twitter
+          .panel.panel-default
+            .panel-body
+              = f.fields_for :business_profile_twitter do |ff|
+                .form-group
+                  = ff.label "Status", class: "col-lg-2 control-label", style: "margin-right: 38px"
+                  .checkbox
+                    %label
+                      = ff.check_box :enabled, class: "check-inline"
+                      Enable or Disable Twitter
+
+              .form-group{class: "#{"disabled" unless current_user.twitter_user_info}"}
+                = f.label "Personal", class: "col-lg-2 control-label", style: "margin-right: 38px"
+                .checkbox.checkbox-modal
+                  %label
+                    = f.check_box :istwitterpersonal, class: "check-inline"
+                    Use Twitter authentication from the user profile
+
+              = f.fields_for :business_profile_twitter do |ff|
+                .form-group
+                  = ff.label "Username", class: "col-lg-2 control-label"
+                  .form-inline.col-lg-10
+                    = ff.text_field :uid, class: "form-control", maxlength: 255, type:"text"
+
+                .form-group
+                  = ff.label :web, class: "col-lg-2 control-label"
+                  .col-lg-10
+                    = ff.url_field :web, class: "form-control", type: "text", placeholder: "business page"
+
+  -#.form-group
+  -#  = f.label :social, class: "col-lg-2 control-label"
+  -#  .form-inline.col-lg-10.switch-toggle.switch-candy
+  -#    = link_to "Facebook", "#business_profile_facebook", "data-toggle" => "modal", class: "btn btn-success btn-sm #{"disabled" if @business_profile.new_record?}"
+  -#    = link_to "Google", "#business_profile_google", "data-toggle" => "modal", class: "btn btn-success btn-sm #{"disabled" if @business_profile.new_record?}"
+  -#    = link_to "Twitter", "#business_profile_twitter", "data-toggle" => "modal", class: "btn btn-success btn-sm #{"disabled" if @business_profile.new_record?}"
+
+  .form-group
+    .col-lg-offset-2.col-lg-10
+      = f.submit @form.model.new_record? ? "Create" : "Update", class: "btn btn-primary"

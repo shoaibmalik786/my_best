@@ -1,0 +1,24 @@
+.modal.fade#sign_in{tabindex: "-1", role: "dialog", "aria-labelledby" => "signInLabel", "aria-hidden" => "true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{type: "button", "data-dismiss" => "modal", "aria-hidden" => "true"} &times;
+        .h4 Sign in
+
+      #user_login_alerts
+
+      .modal-body
+        #providers
+          = link_to "Email", new_user_session_path, class: "btn btn-success"
+          = link_to user_omniauth_authorize_path(:twitter), class: "btn btn-twitter" do
+            = fa_icon "twitter", text: " with Twitter"
+          = link_to user_omniauth_authorize_path(:google_oauth2), class: "btn btn-google-plus" do
+            = fa_icon "google-plus", text: " with Google"
+          = link_to user_omniauth_authorize_path(:facebook), class: "btn btn-facebook" do
+            = fa_icon "facebook", text: " with Facebook"
+
+      .modal-footer
+        Need an account?
+        = link_to "Sign up", new_user_registration_path
+        |
+        = link_to "Forgot your password?", new_password_path('user')

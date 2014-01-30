@@ -1,0 +1,41 @@
+= render partial: "sub_navigation"
+
+.panel.panel-default
+
+  .panel-heading
+    %h4.panel-title
+      = link_to message.title, edit_message_path(message)
+      = link_to message_path(message), method: :delete, data: {confirm: "Really delete message?", action: "Sure, go ahead"}, class: "button close", "aria-hidden" => "true" do
+        &times;
+
+  .panel-body
+    .media
+      .media-object.pull-left= holder_tag '64x64', 'logo', 'gray'
+      .media-body
+        .panel
+          Business:
+          = link_to message.business_profile.name, edit_business_profile_path(message.business_profile)
+        .panel
+          Location:
+          = message.place.try(:name) || ""
+        .panel
+          Status:
+          %span.label{class: "label-#{bootstrap_class_for_message_status(message)}"}= message.message_status_id
+        .panel
+          Start Date:
+          = message.start_date
+        .panel
+          End Date:
+          = message.end_date
+        .panel
+          Reach:
+        .panel
+          Potential Reach:
+        .panel
+          Frequency:
+        .panel
+          Clicks:
+        .panel
+          Duration:
+        .panel
+          = message.description

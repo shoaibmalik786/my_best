@@ -1,0 +1,98 @@
+.alert.alert-dismissable.fade.in{class: "alert-info"}
+  %button.close{type: "button", "data-dismiss" => "alert", "aria-hidden" => "true"} &times;
+  Please <b>note</b>, your message and edits will be <b>reviewed</b> for accuracy before being published
+
+= form_for(@form, as: :message,
+                  url: @form.model.new_record? ? { action: :create, method: :post } : { action: :update, method: :patch },
+                  html: { class: "form-horizontal conciage-form", id: :message, role: "form" }) do |f|
+
+  = form_error_messages!(@form)
+
+  .form-group
+    = f.label "Place Name", class: "col-lg-2 control-label"
+    .form-inline.col-lg-10#name
+      = f.select :business_profile_id, options_for_select(current_user.business_profiles.collect { |business_profile| [business_profile.name, business_profile.id] }, selected: @form.business_profile_id), {}, {class: "form-control"}
+
+  .form-group
+    %label.col-lg-2.control-label Incentive
+    .form-inline.col-lg-10
+      %label{"data-toggle" => "tooltip", title: "Social incentives include items such as wine tasting, charity events, 5K runs, color runs."}
+        = f.radio_button :message_type, :social_incentive, checked: @form.message_type == :social_incentive.to_s
+        &nbsp;Social&nbsp;
+      %label{"data-toggle" => "tooltip", title: "Money saving incentives include any deals and promotions geared towards creating monetary savings for the consumers"}
+        = f.radio_button :message_type, :money_saving, checked: @form.message_type == :money_saving.to_s
+        &nbsp;Money saving&nbsp;
+
+  .form-group
+    %label.col-lg-2.control-label Message
+    .col-lg-10{"data-toggle" => "tooltip", title: "This is the message that will be rendered real time to customers upon approval and cannot be more than 200 characters long. Please ensure that this is a strong incentive to woo customers to come to your place of business."}
+      = f.text_area :description, class: "form-control", type: "text", maxlength: 200 + 50, rows: 4, placeholder: "Bowling with Austine Pettis and Team for Monday Night Football. A night of fun with pro athletes bowling on your team. Tickets include 2 hours of bowling, shoes, pizza and MNF with the Rams"
+
+  .form-group
+    = f.label :from, class: "col-lg-2 control-label"
+    .form-inline.col-lg-10
+      = f.date_field :start_date, class: "form-control", type: "date"
+
+  .form-group
+    = f.label :to, class: "col-lg-2 control-label"
+    .form-inline.col-lg-10
+      = f.date_field :end_date, class: "form-control", type: "date"
+
+  .form-group
+    = f.label :frequency, class: "col-lg-2 control-label"
+    .form-inline.col-lg-10
+      = f.select :frequency, options_for_select(@form.class.frequency.options, selected: @form.frequency), {include_blank: true}, {class: "form-control"}
+      = f.time_select :frequency_time, {}, {class: "form-control time-picker"}
+
+  = f.fields_for :place do |ff|
+    .form-group
+      = ff.label 'Execution Location', class: "col-lg-2 control-label"
+      .col-lg-10
+        .input-group.conciage-typeahead
+          %span.input-group-btn
+            %button.btn.btn-default.btn-with-addon{type: "button"}
+              = fa_icon "location-arrow"
+          = ff.hidden_field :place_id
+          = ff.hidden_field :factual_id
+          = ff.hidden_field :address_extended
+          = ff.hidden_field :country
+          = ff.hidden_field :neighbourhood
+          = ff.hidden_field :tel
+          = ff.hidden_field :fax
+          = ff.hidden_field :website
+          = ff.hidden_field :longitude
+          = ff.hidden_field :latitude
+          = ff.hidden_field :post_town
+          = ff.hidden_field :chain_id
+          = ff.hidden_field :chain_name
+          = ff.hidden_field :admin_region
+          = ff.hidden_field :po_box
+          = ff.hidden_field :category_ids
+          = ff.hidden_field :category_labels
+          = ff.hidden_field :email
+          = ff.text_field :name, class: "form-control with-left-addon", id: "place_search", type: "text", maxlength: 255, placeholder: "start typing name or address ...", autocomplete: false
+
+    .form-group
+      = ff.label " ", class: "col-lg-2 control-label"
+      .form-inline.col-lg-10
+        .conciage-typeahead
+          = ff.text_field :address, class: "form-control", type: "text", maxlength: 255, placeholder: "address"
+        .conciage-typeahead
+          = ff.text_field :region, class: "form-control", type: "text", maxlength: 255, placeholder: "state", autocomplete: false
+
+    .form-group
+      = ff.label " ", class: "col-lg-2 control-label"
+      .form-inline.col-lg-10
+        .conciage-typeahead
+          = ff.text_field :locality, class: "form-control", type: "text", maxlength: 255, placeholder: "city", autocomplete: false
+        .conciage-typeahead
+          = ff.text_field :postcode, class: "form-control", type: "text", maxlength: 255, placeholder: "zip code", autocomplete: false
+
+  .form-group
+    .form-inline.col-lg-10.col-lg-offset-2
+      .gmaps-canvas#messages-gmap
+
+  .form-group
+    .col-lg-offset-2.col-lg-10
+      = f.submit "Save for later", class: "btn btn-primary"
+      = f.submit "Broadcast now", class: "btn btn-primary"

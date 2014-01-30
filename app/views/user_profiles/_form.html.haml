@@ -1,0 +1,79 @@
+= form_for(@form, as: :user_profile,
+                  url: current_user_profile_update_path,
+                  html: { class: "form-horizontal conciage-form", id: :profile, role: "form" }) do |f|
+  = form_error_messages!(@form)
+
+  .form-group
+    = f.label :avatar, class: "col-lg-2 control-label"
+    .form-inline.col-lg-10
+      %div
+        = image_tag @form.avatar.url(:medium)
+        %br/
+        = f.file_field :avatar
+
+  = f.fields_for :username do |fu|
+
+    .form-group
+      = fu.label :username, class: "col-lg-2 control-label"
+      .form-inline.col-lg-10
+        %div
+          = fu.hidden_field :username, id: "username_original"
+          = fu.text_field :username, autofocus: true, class: "form-control", maxlength: 50, type: "text"
+
+  .form-group
+    = f.label :name, class: "col-lg-2 control-label"
+    .form-inline.col-lg-10#name
+      = f.text_field :first_name, class: "form-control", type: "text", maxlength: 50, placeholder: "first"
+      = f.text_field :last_name, class: "form-control", type: "text", maxlength: 50, placeholder: "last"
+
+  .form-group
+    = f.label :email, class: "col-lg-2 control-label"
+    .col-lg-10
+      = f.email_field :email, class: "form-control", maxlength: 255, readonly: false, type: "email"
+
+  = f.fields_for :user_address do |fa|
+    .form-group(style="margin-left:100px")
+      = label_tag ""
+      #input.form-inline.col-lg-10
+        %input#gmaps-input-address{placeholder: "Start typing a place name...", class: "form-control", type: "text", style: "width: 500px"}/
+        %br/
+        %br/
+        -#Latitude:
+        -#%span#gmaps-output-latitude
+        -#%br/
+        -#Longitude:
+        -#%span#gmaps-output-longitude
+        -#%br/
+        #gmaps-error
+      #gmaps-canvas(style="width: 100%; height: 400px;")
+
+  .form-group
+    = f.label :date_of_birth, class: "col-lg-2 control-label"
+    .form-inline.col-lg-10
+      = f.date_field :date_of_birth, class: "form-control", type: "date"
+
+  .form-group
+    = f.label :gender, class: "col-lg-2 control-label"
+    .form-inline.col-lg-10
+      = f.select :gender, options_for_select(@form.class.gender_options, selected: @form.gender_value || "f"), {include_blank: true}, {class: "form-control"}
+
+  .form-group
+    = f.label :time_zone, class: "col-lg-2 control-label"
+    .form-inline.col-lg-10
+      .conciage-typeahead
+        = f.hidden_field :time_zone
+        = f.text_field :time_zone_name, class: "form-control", type: "text", placeholder: "time zone"
+
+  .form-group
+    = f.label :about, class: "col-lg-2 control-label"
+    .col-lg-10
+      = f.text_area :bio, class: "form-control", type: "text", maxlength: 150, placeholder: "drop a line or two about yourself"
+
+  .form-group
+    = f.label :web, class: "col-lg-2 control-label"
+    .col-lg-10
+      = f.url_field :web, class: "form-control", type: "text"
+
+  .form-group
+    .col-lg-offset-2.col-lg-10
+      = f.submit "Update", class: "btn btn-primary"

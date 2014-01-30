@@ -1,0 +1,39 @@
+.conciage-form {
+  padding-right: 21px;
+  .form-inline {
+    .form-control {
+      width: 276px;
+    }
+
+    .time-picker {
+      width: 80px;
+    }
+  }
+
+  .with-left-addon {
+    margin-right: 30px;
+  }
+
+  .btn-with-addon {
+    padding-bottom: 7px;
+  }
+
+  h6 {
+    margin-bottom: -50px;
+  }
+
+  .warning {
+    color: #EE9300;
+  }
+  .exceeded{
+    color: #EE0000;
+  }
+
+  .form-control-right-note {
+    padding-top: 7px;
+
+    * {
+      margin-left: 5px;
+    }
+  }
+}

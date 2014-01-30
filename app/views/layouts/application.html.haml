@@ -1,0 +1,57 @@
+!!! 5
+%html(lang="en")
+  %head
+    %meta{charset: "utf-8"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
+    %meta{name: "description", content: "#{content_for?(:title) ? yield(:title) : "Conciage"}"}
+    %meta{name: "author", content: ""}
+
+    / HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries
+    -#  http://stackoverflow.com/questions/17974998/updating-bootstrap-to-version-3-what-do-i-have-to-do
+    -#  https://code.google.com/p/html5shim/
+    -#  https://github.com/scottjehl/Respond , to work from CDN a fix is needed, read on github
+    /[if lt IE 9]
+      = javascript_include_tag "html5shiv.js"
+      = javascript_include_tag "respond.min.js"
+
+    -# Google Maps
+    = javascript_include_tag "http://maps.googleapis.com/maps/api/js?sensor=false"
+
+    / favicons
+    = favicon_link_tag image_path("favicons/apple-touch-icon-144-precomposed.png"), rel: "apple-touch-icon-precomposed", sizes: "144x144"
+    = favicon_link_tag image_path("favicons/apple-touch-icon-114-precomposed.png"), rel: "apple-touch-icon-precomposed", sizes: "114x114"
+    = favicon_link_tag image_path("favicons/apple-touch-icon-72-precomposed.png"), rel: "apple-touch-icon-precomposed", sizes: "72x72"
+    = favicon_link_tag image_path("favicons/apple-touch-icon-57-precomposed.png"), rel: "apple-touch-icon-precomposed"
+    = favicon_link_tag image_path("favicons/favicon.png")
+
+    %title= content_for?(:title) ? yield(:title) : "Conciage"
+
+    / stylesheets
+    = stylesheet_link_tag "application"
+
+    = csrf_meta_tags
+
+  %body
+    .container
+      = render partial: "layouts/sign_in"
+
+      .header
+        = render partial: "layouts/main_navigation"
+
+      -unless flash.empty?
+        - flash.each do |level, message|
+          = render partial: "layouts/alert", locals: {level: level, message: message}
+
+      .row.marketing
+        = yield
+
+      - if user_signed_in?
+        .pull-right#create_business_profile_main_link
+          = link_to "Create Business Page", new_business_profile_path
+
+      .footer
+        %p &copy; Conciage 2013
+
+  -# Javascripts placed at the end of the document so the pages load faster
+  = javascript_include_tag "http://twitter.github.com/hogan.js/builds/2.0.0/hogan-2.0.0.js"
+  = javascript_include_tag "application"

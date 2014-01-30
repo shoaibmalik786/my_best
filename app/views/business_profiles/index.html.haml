@@ -1,0 +1,14 @@
+= render partial: "sub_navigation"
+
+- if @business_profiles.empty?
+  .jumbotron
+    %h2 You have no registered businesses
+    %h4
+      Maybe you would like to
+      = link_to "add a new business", new_business_profile_path
+      ?
+
+- else
+  #content-with-sub-navigation
+    - @business_profiles.each do |business_profile|
+      = render partial: "business_profile", locals: {business_profile: business_profile}

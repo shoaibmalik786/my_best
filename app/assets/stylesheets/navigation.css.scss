@@ -1,0 +1,17 @@
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+  color: dimgray;
+  background-color: rgb(233, 219, 165);
+}
+
+.nav-pills > li > a {
+  color: rgb(170, 156, 119);
+}
+
+.nav-pills > li > a:hover {
+  background-color: rgba(233, 219, 165, 0.55);
+}
+
+#create_business_profile_main_link {
+  padding-top: 20px;
+  float: left;
+}

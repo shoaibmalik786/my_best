@@ -1,0 +1,29 @@
+%h3 Sign in
+%br
+
+= form_for(resource, as: resource_name,
+                     url: session_path(resource_name),
+                     html: { class: "form-horizontal", role: "form" }) do |f|
+  = devise_error_messages!
+
+  .form-group
+    = f.label :email, class: "col-lg-2 control-label"
+    .col-lg-10
+      = f.email_field :email, autofocus: true, class: "form-control", type: "email", placeholder: "email"
+
+  .form-group
+    = f.label :password, class: "col-lg-2 control-label"
+    .col-lg-10
+      = f.password_field :password, class: "form-control", type: "password", placeholder: "password"
+
+  - if devise_mapping.rememberable?
+    .form-group
+      .col-lg-offset-2.col-lg-10
+        = f.check_box :remember_me
+        = f.label :remember_me
+
+  .form-group
+    .col-lg-offset-2.col-lg-10
+      = f.submit "Sign in", class: "btn btn-default"
+
+= render "devise/shared/links"

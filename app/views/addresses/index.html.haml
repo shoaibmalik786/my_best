@@ -1,0 +1,22 @@
+%h1 Addresses
+
+= link_to "Add new address", new_address_path, class: "btn btn-success"
+%br/
+%br/
+
+%table.table
+  %tr
+    %td(style="width:200px")
+    %td(style="text-align: center") Main Address?
+  - @addresses.each do |address|
+    %tr
+      %td(style="width:200px")
+        = address.address_one
+        %br/
+        = link_to "Edit", edit_address_path(address)
+        |
+        = link_to "Delete", address_path(address), method: :delete, confirm: "Are you sure?"
+      %td(style="text-align: center")
+        = address.main? ? "Yes" : "No"
+      %td
+        = link_to "Make it main address", make_main_address_path(address)

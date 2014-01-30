@@ -1,0 +1,8 @@
+#sub_navigation{role: "navigation"}
+  %ul.nav.nav-pills.nav-stacked
+    %li{class: current_page?(messages_path) ? "active" : ""}= link_to "Overview", messages_path
+    %li{class: (current_page?(new_message_path) || params[:action] == "create") ? "active" : ""}= link_to "New Message", new_message_path
+    -if @message && !@message.new_record?
+      %li{class: params[:action] == "analytics" ? "active" : ""}= link_to "Analytics", message_analytics_path(@message)
+    -if editing?
+      %li.active= link_to "Edit", edit_message_path(@message)

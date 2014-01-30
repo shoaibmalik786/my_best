@@ -1,0 +1,32 @@
+%h1 New Address
+
+= link_to "Back", addresses_path
+
+= form_for @address, url: "/addresses" do |f|
+
+  %p
+    Country:
+    %br/
+    = select :user_address, :country_id, Country.all.map{|e| [e.name, e.id]}
+  %p
+    State:
+    %br/
+    = select :user_address, :state_id, State.all.map{|e| [e.name, e.id]}
+  %p
+    City:
+    %br/
+    = select :user_address, :city_id, City.all.map{|e| [e.name, e.id]}
+
+
+  %br/
+  = f.text_field :address_one, id: "gmaps-input-address", class: "form-control"
+
+  = f.text_field :lat, id: "gmaps-output-latitude", readonly: true, class: "hide"
+  = f.text_field :lng, id: "gmaps-output-longitude", readonly: true, class: "hide"
+  %br/
+  %br/
+
+  #gmaps-canvas(style="width: 100%; height: 400px;")
+
+  = submit_tag "Save"
+

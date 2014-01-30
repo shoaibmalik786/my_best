@@ -1,0 +1,25 @@
+#sign_in {
+  .modal-body {
+      text-align: center;
+  }
+
+  #email {
+    padding-top: 20px;
+  }
+
+  #user_email {
+    width: 200px;
+  }
+
+  #user_password {
+    width: 200px;
+  }
+
+  #providers {
+    padding-top: 30px;
+  }
+
+  .modal-footer {
+    text-align: left;
+  }
+}

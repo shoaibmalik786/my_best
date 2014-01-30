@@ -1,0 +1,23 @@
+.conciage-typeahead {
+  float: left;
+  margin-right: 4px;
+
+  .full_width {
+    width: 558px;
+  }
+
+  .twitter-typeahead {
+    .tt-hint {
+      padding-top: 6px;
+      padding-left: 11px;
+    }
+
+    .tt-suggestion {
+      padding: 4px 14px;
+    }
+
+    .tt-suggestion + .tt-suggestion {
+      border-top: 1px solid #ccc;
+    }
+  }
+}
